@@ -7,8 +7,8 @@ pub fn part_one(input: &str) -> Option<u32> {
     // Build left and right hand side lists
     for id in input.split("\n") {
         let line: Vec<String> = id.split_whitespace().map(str::to_string).collect();
-        lhs.push(line.get(0)?.parse().unwrap());
-        rhs.push(line.get(1)?.parse().unwrap());
+        lhs.push(line.first()?.parse().unwrap());
+        rhs.push(line.last()?.parse().unwrap());
     }
 
     // Sort lists
@@ -23,11 +23,8 @@ pub fn part_one(input: &str) -> Option<u32> {
     }
 
     // Sum and get answer
-    let sum: u32 = match i32::try_into(diffs.iter().sum()) {
-        Ok(u32) => u32,
-        Err(_) => 0,
-    };
-    return Some(sum);
+    let sum: u32 = i32::try_into(diffs.iter().sum()).unwrap();
+    Some(sum)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
@@ -37,14 +34,14 @@ pub fn part_two(input: &str) -> Option<u32> {
     // Build left and right hand side lists
     for id in input.split("\n") {
         let line: Vec<String> = id.split_whitespace().map(str::to_string).collect();
-        lhs.push(line.get(0)?.parse().unwrap());
-        rhs.push(line.get(1)?.parse().unwrap());
+        lhs.push(line.first()?.parse().unwrap());
+        rhs.push(line.last()?.parse().unwrap());
     }
 
     // Count occurances of LHS in RHS and sum as per day logic
     // Might be faster sorting first and somehow telling rust its searching a sorted list when counting occurrences. Didn't bother optimising
     let mut sum_similarity_score: u32 = 0;
-    for (_, lhs_elem) in lhs.iter_mut().enumerate() {
+    for lhs_elem in lhs.iter_mut() {
         let this_count: u32 = rhs
             .iter()
             .filter(|&val| *val == *lhs_elem)
@@ -53,7 +50,7 @@ pub fn part_two(input: &str) -> Option<u32> {
             .unwrap(); // count occurrences of a filter that returns true for when rhs 'val' is the val of the lhs element
         sum_similarity_score += *lhs_elem * this_count; // day logic
     }
-    return Some(sum_similarity_score);
+    Some(sum_similarity_score)
 }
 
 #[cfg(test)]
