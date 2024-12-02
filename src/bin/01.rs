@@ -38,7 +38,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         rhs.push(line.last()?.parse().unwrap());
     }
 
-    // Count occurances of LHS in RHS and sum as per day logic
+    // Count occurrences of LHS in RHS and sum as per day logic
     // Might be faster sorting first and somehow telling rust its searching a sorted list when counting occurrences. Didn't bother optimising
     let mut sum_similarity_score: u32 = 0;
     for lhs_elem in lhs.iter_mut() {
