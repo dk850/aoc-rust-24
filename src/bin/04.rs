@@ -34,7 +34,7 @@ pub fn parse_into_grid(input: &str) -> Vec<Vec<String>> {
 
 // Returns the mid-point or Error
 fn check_word(
-    grid: &Vec<Vec<String>>,
+    grid: &[Vec<String>],
     word: &String,
     start_pos: &GridPos,
     direction: &GridDir,
@@ -56,115 +56,115 @@ fn check_word(
     // Match on direction, error check, then check each letter matches. For each direction
     match direction {
         GridDir::Up => {
-            if start_pos.y.checked_sub(word_len) == None {
-                return None
+            if Option::is_none(&start_pos.y.checked_sub(word_len)) {
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y - letter_pos][start_pos.x] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y - letter_pos][start_pos.x] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y -= point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::Down => {
-            if (start_pos.y.checked_add(word_len) == None) || ((start_pos.y + word_len) > max_y) {
-                return None
+            if Option::is_none(&start_pos.y.checked_add(word_len)) || ((start_pos.y + word_len) > max_y) {
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y + letter_pos][start_pos.x] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y + letter_pos][start_pos.x] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y += point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::Left => {
-            if start_pos.x.checked_sub(word_len) == None {
-                return None
+            if Option::is_none(&start_pos.x.checked_sub(word_len)) {
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y][start_pos.x - letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y][start_pos.x - letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.x -= point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::Right => {
-            if (start_pos.x.checked_add(word_len) == None) || ((start_pos.x + word_len) > max_x) {
-                return None
+            if Option::is_none(&start_pos.x.checked_add(word_len)) || ((start_pos.x + word_len) > max_x) {
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y][start_pos.x + letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y][start_pos.x + letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.x += point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::ULeft => {
-            if (start_pos.y.checked_sub(word_len) == None) || (start_pos.x.checked_sub(word_len) == None) {
-                return None
+            if Option::is_none(&start_pos.y.checked_sub(word_len)) || Option::is_none(&start_pos.x.checked_sub(word_len)) {
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y - letter_pos][start_pos.x - letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y - letter_pos][start_pos.x - letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y -= point_modifier;
             ret_pos.x -= point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::URight => {
-            if (start_pos.y.checked_sub(word_len) == None)
-                || (start_pos.x.checked_add(word_len) == None) || ((start_pos.x + word_len) > max_x)
+            if Option::is_none(&start_pos.y.checked_sub(word_len))
+                || Option::is_none(&start_pos.x.checked_add(word_len)) || ((start_pos.x + word_len) > max_x)
             {
-                return None
+                return None;
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y - letter_pos][start_pos.x + letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y - letter_pos][start_pos.x + letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y -= point_modifier;
             ret_pos.x += point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::DLeft => {
-            if (start_pos.y.checked_add(word_len) == None) || ((start_pos.y + word_len) > max_y)
-                || (start_pos.x.checked_sub(word_len) == None) {
+            if Option::is_none(&start_pos.y.checked_add(word_len)) || ((start_pos.y + word_len) > max_y)
+                || Option::is_none(&start_pos.x.checked_sub(word_len)) {
                 return None
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y + letter_pos][start_pos.x - letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y + letter_pos][start_pos.x - letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y += point_modifier;
             ret_pos.x -= point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
 
         GridDir::DRight => {
-            if (start_pos.y.checked_add(word_len) == None) || ((start_pos.y + word_len) > max_y)
-                || (start_pos.x.checked_add(word_len) == None) || ((start_pos.x + word_len) > max_x) {
+            if Option::is_none(&start_pos.y.checked_add(word_len)) || ((start_pos.y + word_len) > max_y)
+                || Option::is_none(&start_pos.x.checked_add(word_len)) || ((start_pos.x + word_len) > max_x) {
                 return None
             }
             for (letter_pos, &letter_bytes) in word.as_bytes().iter().enumerate() {
-                if !(grid[start_pos.y + letter_pos][start_pos.x + letter_pos] == (letter_bytes as char).to_string()) {
+                if grid[start_pos.y + letter_pos][start_pos.x + letter_pos] != (letter_bytes as char).to_string() {
                     return None;
                 }
             }
             ret_pos.y += point_modifier;
             ret_pos.x += point_modifier;
-            return Some(ret_pos);
+            Some(ret_pos)
         }
     }
 }
@@ -185,24 +185,20 @@ fn find_cross_word_in_grid(grid: &Vec<Vec<String>>, word: &String, at_pos: &Grid
     // Check if there is a match in each diagonal. Return positive match positions for futher filtering
     let mut found_pos: Vec<GridPos> = Vec::new();
 
-    let ul = check_word(grid, word, at_pos, &GridDir::ULeft);
-    if ul.is_some() {
-        found_pos.push(ul.unwrap());
+    if let Some(ul) = check_word(grid, word, at_pos, &GridDir::ULeft) {
+        found_pos.push(ul);
     }
 
-    let ur = check_word(grid, word, at_pos, &GridDir::URight);
-    if ur.is_some() {
-        found_pos.push(ur.unwrap());
+    if let Some(ur) = check_word(grid, word, at_pos, &GridDir::URight) {
+        found_pos.push(ur);
     }
 
-    let dl = check_word(grid, word, at_pos, &GridDir::DLeft);
-    if dl.is_some() {
-        found_pos.push(dl.unwrap());
+    if let Some(dl) = check_word(grid, word, at_pos, &GridDir::DLeft) {
+        found_pos.push(dl);
     }
 
-    let dr = check_word(grid, word, at_pos, &GridDir::DRight);
-    if dr.is_some() {
-        found_pos.push(dr.unwrap());
+    if let Some (dr) = check_word(grid, word, at_pos, &GridDir::DRight) {
+        found_pos.push(dr);
     }
     found_pos
 }
@@ -224,7 +220,7 @@ pub fn part_one(input: &str) -> Option<u32> {
             }
         }
     }
-    println!("Found {} at {} positions", first_letter, first_letter_pos.len());
+    // println!("Found {} at {} positions", first_letter, first_letter_pos.len());
 
     // See if any of the X positions have the full word
     let mut total_matching = 0;
@@ -248,7 +244,7 @@ pub fn part_two(input: &str) -> Option<u32> {
             }
         }
     }
-    println!("Found {} at {} positions", first_letter, first_letter_pos.len());
+    // println!("Found {} at {} positions", first_letter, first_letter_pos.len());
 
     let mut total_grid_pos: Vec<GridPos> = Vec::new();
     for p_match_pos in first_letter_pos.iter() {
@@ -263,7 +259,7 @@ pub fn part_two(input: &str) -> Option<u32> {
             matches += 1;
         }
     }
-    Some(matches/2 as u32)  // each entry will be in the list twice so /2 gives real result
+    Some((matches/2) as u32)  // each entry will be in the list twice so /2 gives real result
 }
 
 #[cfg(test)]
