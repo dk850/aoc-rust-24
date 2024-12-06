@@ -4,12 +4,6 @@ use strum_macros::EnumIter;
 
 advent_of_code::solution!(4);
 
-#[derive(Debug, PartialEq, Clone)]
-struct GridPos {
-    x: usize,
-    y: usize,
-}
-
 #[derive(Debug, EnumIter)]
 enum GridDir {
     Up,
@@ -22,23 +16,13 @@ enum GridDir {
     DRight,
 }
 
-pub fn parse_into_grid(input: &str) -> Vec<Vec<String>> {
-    let mut output: Vec<Vec<String>> = Vec::new();
-
-    // Build grid
-    for line in input.lines() {
-        output.push(line.chars().map(String::from).collect());
-    }
-    output
-}
-
 // Returns the mid-point or Error
 fn check_word(
     grid: &[Vec<String>],
     word: &String,
-    start_pos: &GridPos,
+    start_pos: &advent_of_code::GridPos,
     direction: &GridDir,
-) -> Option<GridPos> {
+) -> Option<advent_of_code::GridPos> {
     let max_y = grid.len() - 1;
     let max_x = grid.first().unwrap_or(&Vec::new()).len() - 1;
     let word_len = word.len() - 1;
@@ -48,7 +32,7 @@ fn check_word(
     if word.len() % 2 == 1 {
         point_modifier = (word.len() - 1) / 2;
     }
-    let mut ret_pos = GridPos {
+    let mut ret_pos = advent_of_code::GridPos {
         x: start_pos.x,
         y: start_pos.y,
     };
@@ -193,7 +177,7 @@ fn check_word(
     }
 }
 
-fn find_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &GridPos) -> i32 {
+fn find_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &advent_of_code::GridPos) -> i32 {
     // Check if there is a match in each direction
     let mut found_count: i32 = 0;
     for dir in GridDir::iter() {
@@ -204,9 +188,9 @@ fn find_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &GridPos) -> i
     found_count
 }
 
-fn find_cross_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &GridPos) -> Vec<GridPos> {
+fn find_cross_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &advent_of_code::GridPos) -> Vec<advent_of_code::GridPos> {
     // Check if there is a match in each diagonal. Return positive match positions for futher filtering
-    let mut found_pos: Vec<GridPos> = Vec::new();
+    let mut found_pos: Vec<advent_of_code::GridPos> = Vec::new();
 
     if let Some(ul) = check_word(grid, word, at_pos, &GridDir::ULeft) {
         found_pos.push(ul);
@@ -228,18 +212,18 @@ fn find_cross_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &GridPos
 
 pub fn part_one(input: &str) -> Option<u32> {
     let search_term = "XMAS";
-    let input_grid = parse_into_grid(input);
+    let input_grid = advent_of_code::parse_into_grid(input);
 
     // println!("Input Wordsearch:");
     // advent_of_code::print_2d_vec(&input_grid);
 
     // Iterate over grid to find every occurrence of X (starting letter of search term)
     let first_letter = search_term.chars().next().unwrap().to_string();
-    let mut first_letter_pos: Vec<GridPos> = Vec::new(); // [1, 2], [0, 0]...
+    let mut first_letter_pos: Vec<advent_of_code::GridPos> = Vec::new(); // [1, 2], [0, 0]...
     for (y, row) in input_grid.iter().enumerate() {
         for (x, letter) in row.iter().enumerate() {
             if letter == &first_letter {
-                first_letter_pos.push(GridPos { x, y });
+                first_letter_pos.push(advent_of_code::GridPos { x, y });
             }
         }
     }
@@ -256,20 +240,20 @@ pub fn part_one(input: &str) -> Option<u32> {
 pub fn part_two(input: &str) -> Option<u32> {
     // D.K- a horrible shoehorn of my implementation to solve the answer
     let search_term = "MAS";
-    let input_grid = parse_into_grid(input);
+    let input_grid = advent_of_code::parse_into_grid(input);
 
     let first_letter = search_term.chars().next().unwrap().to_string();
-    let mut first_letter_pos: Vec<GridPos> = Vec::new(); // [1, 2], [0, 0]...
+    let mut first_letter_pos: Vec<advent_of_code::GridPos> = Vec::new(); // [1, 2], [0, 0]...
     for (y, row) in input_grid.iter().enumerate() {
         for (x, letter) in row.iter().enumerate() {
             if letter == &first_letter {
-                first_letter_pos.push(GridPos { x, y });
+                first_letter_pos.push(advent_of_code::GridPos { x, y });
             }
         }
     }
     // println!("Found {} at {} positions", first_letter, first_letter_pos.len());
 
-    let mut total_grid_pos: Vec<GridPos> = Vec::new();
+    let mut total_grid_pos: Vec<advent_of_code::GridPos> = Vec::new();
     for p_match_pos in first_letter_pos.iter() {
         total_grid_pos.append(
             find_cross_word_in_grid(&input_grid, &search_term.to_string(), p_match_pos).as_mut(),
