@@ -7,8 +7,10 @@ pub fn part_one(input: &str) -> Option<u32> {
     // Build left and right hand side lists
     for id in input.split("\n") {
         let line: Vec<String> = id.split_whitespace().map(str::to_string).collect();
-        lhs.push(line.first()?.parse().unwrap());
-        rhs.push(line.last()?.parse().unwrap());
+        if line.len() == 2 {
+            lhs.push(line.first()?.parse().unwrap());
+            rhs.push(line.last()?.parse().unwrap());
+        }
     }
 
     // Sort lists
@@ -34,8 +36,10 @@ pub fn part_two(input: &str) -> Option<u32> {
     // Build left and right hand side lists
     for id in input.split("\n") {
         let line: Vec<String> = id.split_whitespace().map(str::to_string).collect();
-        lhs.push(line.first()?.parse().unwrap());
-        rhs.push(line.last()?.parse().unwrap());
+        if line.len() == 2 {
+            lhs.push(line.first()?.parse().unwrap());
+            rhs.push(line.last()?.parse().unwrap());
+        }
     }
 
     // Count occurrences of LHS in RHS and sum as per day logic
