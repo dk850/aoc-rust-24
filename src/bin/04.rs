@@ -188,7 +188,11 @@ fn find_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &advent_of_cod
     found_count
 }
 
-fn find_cross_word_in_grid(grid: &[Vec<String>], word: &String, at_pos: &advent_of_code::GridPos) -> Vec<advent_of_code::GridPos> {
+fn find_cross_word_in_grid(
+    grid: &[Vec<String>],
+    word: &String,
+    at_pos: &advent_of_code::GridPos,
+) -> Vec<advent_of_code::GridPos> {
     // Check if there is a match in each diagonal. Return positive match positions for futher filtering
     let mut found_pos: Vec<advent_of_code::GridPos> = Vec::new();
 
